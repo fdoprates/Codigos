@@ -1,0 +1,37 @@
+%%[
+SET @eventName = "Nome do Evento"
+SET @eventStart = FormatDate(Now(), "yyyyMMddTHHmmssZ") /* Data de início do evento */
+SET @eventEnd = FormatDate(DateAdd(Now(), 2, "H"), "yyyyMMddTHHmmssZ") /* Fim do evento (ex: 2 horas depois) */
+SET @eventLocation = "Local do Evento"
+SET @eventDescription = "Descrição do evento."
+
+SET @icsContent = Concat(
+  "BEGIN:VCALENDAR", Char(13),
+  "VERSION:2.0", Char(13),
+  "BEGIN:VEVENT", Char(13),
+  "SUMMARY:", @eventName, Char(13),
+  "DTSTART:", @eventStart, Char(13),
+  "DTEND:", @eventEnd, Char(13),
+  "LOCATION:", @eventLocation, Char(13),
+  "DESCRIPTION:", @eventDescription, Char(13),
+  "END:VEVENT", Char(13),
+  "END:VCALENDAR"
+)
+
+SET @encodedICS = Base64Encode(@icsContent) /* Converte para Base64 se necessário */
+]%%
+
+<a href="data:text/calendar;charset=utf8,%%=URLEncode(@icsContent)=%%" download="evento.ics">Adicione ao seu calendário</a>
+
+
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:Nome do Evento
+DTSTART:20250201T150000Z
+DTEND:20250201T160000Z
+LOCATION:Local do Evento
+DESCRIPTION:Descrição do evento.
+END:VEVENT
+END:VCALENDAR
+
